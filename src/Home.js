@@ -1,17 +1,11 @@
 import { Routes, Route } from "react-router-dom";
 // import Landing from "./templates/landing.js";
 import Sidebar from "./admin-temp/sidebar/sidebar.jsx";
-import Report from "./admin-temp/report.jsx";
-import HelpSupport from "./admin-temp/helpsupport.jsx";
-import Announcements_Admin from "./admin-temp/announcements.jsx";
-import Messages from "./admin-temp/messages.jsx";
+import Dashboard from "./admin-temp/dashboard/index.jsx";
+import Monitoring from "./admin-temp/monitoring/index.jsx";
+import Announcement from "./admin-temp/announcement/index.jsx";
+import Message from "./admin-temp/message/index.jsx";
 
-import "./admin-temp/hns.css"
-// import "./admin-temp/announcements.css"
-import "./admin-temp/messages.css"
-import "./admin-temp/report.css"
-import "./admin-temp/sidebar/stylebar.css"
-import "./admin-temp/style.css"
 
 
 
@@ -30,10 +24,10 @@ export default function Home(){
         <div>
             <Sidebar />
             <Routes>
-                <Route path="/" element={<Report/>} />
-                <Route path="/helpandsupport" element={<HelpSupport/>} />
-                <Route path="/announcements" element={<Announcements_Admin/>} />
-                <Route path="/message" element={<Messages/>} />
+                <Route path="/" element={<Dashboard/>} />
+                <Route path="/vehiclestatus" element={<Monitoring/>} />
+                <Route path="/announcement" element={<Announcement/>} />
+                <Route path="/message" element={<Message/>} />
             </Routes>
 
         </div>

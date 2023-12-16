@@ -1,18 +1,10 @@
-body{
-    margin: 0;
-    padding: 0;
-    background: #F2F3F8;
-    font-family: inter;
-    /* height: 300vh; */
-}
-
-/* -------------Sidebar---------------- */
 .sidebar{
     background: #FFF;
     box-shadow: 2px 0px 4px 0px rgba(0, 0, 0, 0.10);
     height: 100vh;
     width: 20%;
     position: fixed;
+    margin: 0px;
 }
 .brand-name{
     color: #141414;
@@ -35,25 +27,25 @@ body{
 }
 .heading-name {
     width: 90%;
-    padding: 9.5px 0px 9.5px 16px;
+    padding: 12px 0px 12px 16px;
     align-items: center;
     border-radius: 8px;
-    margin: 8px;
+    margin: 10px 8px;
     display: flex;
     color: #111;
-    font-size: 18px;
+    font-size: 20px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
 }
 a{
-    text-decoration: none;  
+    text-decoration: none;
 }
 .heading-name span{
     padding-right: 10px;
 }
 .heading-name:hover{
-    background: #F66401;
+    background: #101A29;
     color: #FFF;
     cursor: pointer;
 }
@@ -70,7 +62,7 @@ margin:28px auto;
     height: 48px;
     border-radius: 50%;
     margin: 0px 16px 0px 16px;
-    background: url(../profile-pic.png);
+    background: url(../assets/profile-pic.png);
     background-size: cover;
     background-position: center;
 }
@@ -99,4 +91,9 @@ margin:28px auto;
 }
 .logout span{
     padding-right: 10px;
+}
+.heading-name.active{
+    background: #101A29;
+    color: #FFF;
+    cursor: pointer;
 }
