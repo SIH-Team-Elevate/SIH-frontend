@@ -9,14 +9,23 @@
     display: flex;
 }
 .map{
-    display: flex;
+    width: 700px;
+  height: 350px;
+  margin: 30px;
+  margin-right: 0px;
+  background-color: #101A29;
+  overflow: hidden;
+  /* display: flex; */
+  position: absolute;
+}
+.map *{
+    /* transform: none !important; */
+    position: absolute;
+}
+.leaflet-container {
     width: 700px;
     height: 350px;
-    margin: 30px;
-    margin-right: 0px;
-    background: url(../assets/map.png);
-    background-size: cover;
-    background-color: #101A29;
+    position: relative;
 }
 .r{
     margin: 30px 60px ;

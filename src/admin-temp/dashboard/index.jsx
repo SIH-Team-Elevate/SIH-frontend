@@ -1,5 +1,57 @@
 import { useEffect, useState } from "react";
 import "./dashboard.css"
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+
+import L from 'leaflet';
+
+// Fix for default marker icon path
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+});
+
+
+function LeafletMap() {
+  const [currentLocation, setCurrentLocation] = useState(null);
+
+  useEffect(() => {
+    if (navigator && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(pos => {
+        const { latitude, longitude } = pos.coords;
+
+        setCurrentLocation({
+          lat: latitude,
+          lng: longitude
+        });
+      });
+    }
+  }, []);
+
+  return (
+    <div className="leaflet-map">
+  {currentLocation && (
+    <MapContainer
+      center={[currentLocation.lat, currentLocation.lng]}
+      zoom={12}
+      className="map"
+      style={{height:"350px", width:"700px"}}
+      scrollWheelZoom={false}
+      zoomControl={false}
+      dragging={false}
+    >
+      <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      />
+      <Marker position={[currentLocation.lat, currentLocation.lng]} />
+    </MapContainer>
+  )}
+</div>
+  );
+};
+
 function GoogleChart() {
     useEffect(() => {
       const script = document.createElement('script');
@@ -76,7 +128,8 @@ export default function Dashboard(){
         <>
         <div className="content">
         <div className="top">
-            <div className="map"></div>
+            {/* <div className="map"></div> */}
+            <LeafletMap />
             <div className="r">
                 <div className="showel">
                     <div className="headingss">Showel</div>
