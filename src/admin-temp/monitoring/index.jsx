@@ -16,7 +16,7 @@ function Vehicle(){
         getData();
     }, []);
     return(<>{loading?<Box display="flex" justifyContent="center" alignItems="center" height="100vh"><CircularProgress /></Box>:
-        <div className="report">
+        <div className="reportt">
             <table className="table">
                 <tr className="noline">
                     <th>Vechile Id</th>
@@ -68,7 +68,7 @@ function Live(){
     }, []);
     return(<>
         {loading?<Box display="flex" justifyContent="center" alignItems="center" height="100vh"><CircularProgress /></Box>:
-        <div className="report">
+        <div className="reportt">
             <table className="table">
                 <tr className="noline">
                     <th>Employee ID</th>
@@ -123,7 +123,7 @@ function History(){
     }, []);
     return (<>
         {loading?<Box display="flex" justifyContent="center" alignItems="center" height="100vh"><CircularProgress /></Box>:
-        <div className="report">
+        <div className="reportt">
             <table className="table">
                 <tr className="noline">
                     <th>Name</th>

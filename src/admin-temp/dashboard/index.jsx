@@ -155,7 +155,7 @@ export default function Dashboard(){
                 </div>
             </div>
         </div>
-        <div className="top bottom">
+        <div className="topbottom">
             <div className="report">
                 <table className="table">
                     <tr className="noline">
