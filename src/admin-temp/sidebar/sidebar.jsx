@@ -31,7 +31,7 @@ export default function Sidebar() {
         <div className="user">
             <div className="user-photo"></div>
             <div className="user-data">
-                <div className="user-name">Pratyaksh</div>
+                <div className="user-name">{Cookies.get('name')}</div>
                 <div className="user-code">2022CS51654</div>
             </div>
         </div>

@@ -56,13 +56,7 @@ export default function SignIn() {
       if(data.success){
         Cookies.set('autho',data.autho,{expires:10/1440});
         Cookies.set('name',data.name,{expires:10/1440});
-        console.log(location.key)
-        if(location.key==='initial'){
-          navigate('/');
-        }
-        else{
-          navigate(-1);
-        }
+        navigate("/")
       }
       else{
         alert(data.message);
