@@ -2,13 +2,23 @@ import { useEffect, useState } from "react"
 import "./monitoring.css"
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 function Vehicle(){
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
+    const navigate = useNavigate();
     useEffect(() => {
         const getData = async () => {
-            await fetch("http://localhost:3001/frontend/dumpsters_shovels").then((res) => res.json()).then((res) => {
+            await fetch("http://localhost:3001/frontend/dumpsters_shovels",{
+                headers:{
+                    Authorization: `Bearer ${Cookies.get('autho')}`
+                }
+            }).then((res) => res.json()).then((res) => {
+                if(res.status === 403){
+                    navigate('/signin');
+                }
                 setData(res);
                 setLoading(false);
             });
@@ -56,10 +66,17 @@ function Vehicle(){
 function Live(){
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
+    const navigate = useNavigate();
     useEffect(() => {
         const getData = async () => {
-            await fetch("http://localhost:3001/frontend/users").then((res) => res.json()).then((res) => {
-                console.log(res)
+            await fetch("http://localhost:3001/frontend/users",{
+                headers:{
+                    Authorization: `Bearer ${Cookies.get('autho')}`
+                }
+            }).then((res) => res.json()).then((res) => {
+                if(res.status === 403){
+                    navigate('/signin');
+                }
                 setData(res);
                 setLoading(false);
             });
@@ -111,10 +128,18 @@ function Live(){
 function History(){
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
+    const navigate = useNavigate();
     useEffect(() => {
         const getData = async () => {
-            await fetch("http://localhost:3001/frontend/users").then((res) => res.json()).then((res) => {
-                console.log(res)
+            await fetch("http://localhost:3001/frontend/users",{
+                headers:{
+                    Authorization: `Bearer ${Cookies.get('autho')}`
+                }
+            }
+            ).then((res) => res.json()).then((res) => {
+                if(res.status === 403){
+                    navigate('/signin');
+                }
                 setData(res);
                 setLoading(false);
             });

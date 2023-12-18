@@ -13,14 +13,15 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Cookies from 'js-cookie';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      <Link color="inherit" href="https://www.startupindia.gov.in/content/sih/en/startup-scheme.html">
+        Team Elevate
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -33,6 +34,8 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignIn() {
+  const navigate=useNavigate();
+  const location=useLocation();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -40,8 +43,33 @@ export default function SignIn() {
       email: data.get('email'),
       password: data.get('password'),
     });
-    Cookies.set('autho','1234567890',{expires:3/1440});
-    Cookies.set('type','driver',{expires:3/1440});
+    fetch('http://localhost:3001/frontend/authenticate',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify({
+        email:data.get('email'),
+        password:data.get('password')
+      })
+    }).then(res=>res.json()).then(data=>{
+      if(data.success){
+        Cookies.set('autho',data.autho,{expires:10/1440});
+        Cookies.set('name',data.name,{expires:10/1440});
+        console.log(location.key)
+        if(location.key==='initial'){
+          navigate('/');
+        }
+        else{
+          navigate(-1);
+        }
+      }
+      else{
+        alert(data.message);
+      }
+    }).catch(err=>{
+      console.log(err);
+    });
   };
 
   return (
@@ -95,7 +123,7 @@ export default function SignIn() {
             >
               Sign In
             </Button>
-            <Grid container>
+            {/* <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">
                   Forgot password?
@@ -106,7 +134,7 @@ export default function SignIn() {
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
-            </Grid>
+            </Grid> */}
           </Box>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />

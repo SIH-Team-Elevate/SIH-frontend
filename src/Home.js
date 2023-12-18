@@ -9,17 +9,7 @@ import Message from "./admin-temp/message/index.jsx";
 
 
 
-function isAuthenticated(){
-    localStorage.clear();
-    if(!localStorage.getItem('type'))
-    localStorage.setItem('type','admin');
-    return true;
-}
-
 export default function Home(){
-    if(!isAuthenticated()){
-        window.location.href="/signin";
-    }
     return(
         <div>
             <Sidebar />
@@ -28,6 +18,7 @@ export default function Home(){
                 <Route path="/vehiclestatus" element={<Monitoring/>} />
                 <Route path="/announcement" element={<Announcement/>} />
                 <Route path="/message" element={<Message/>} />
+                <Route path="*" element={<Dashboard/>} />
             </Routes>
 
         </div>

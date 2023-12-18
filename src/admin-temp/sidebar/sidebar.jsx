@@ -1,7 +1,9 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./stylebar.css"
+import Cookies from "js-cookie";
 export default function Sidebar() {
   const location=useLocation();
+  const navigate = useNavigate();
   return (
     <>
       <div className="sidebar">
@@ -33,8 +35,12 @@ export default function Sidebar() {
                 <div className="user-code">2022CS51654</div>
             </div>
         </div>
-        <div className="logout">
-            <span className="material-symbols-outlined">logout</span>
+        <div className="logout" onClick={()=>{
+                Cookies.remove('autho');
+                Cookies.remove('name')
+                navigate('/signin', { replace: true });
+            }}>
+            <span className="material-symbols-outlined" >logout</span>
             Logout
         </div>
     </div>

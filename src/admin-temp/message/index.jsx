@@ -3,14 +3,24 @@ import "./message.css"
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 export default function Message() {
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
     const [message, setMessage] = useState({sender:"Please Select a Message",message:""});
     useEffect(() => {
         const getData = async () => {
-            await fetch("http://localhost:3001/frontend/queries").then((res) => res.json()).then((res) => {
+            await fetch("http://localhost:3001/frontend/queries",{
+                headers:{
+                    Authorization: `Bearer ${Cookies.get('autho')}`
+                }
+            }).then((res) => res.json()).then((res) => {
+                if(res.status === 403){
+                    navigate('/signin');
+                }
                 setData(res.queries);
                 setLoading(false);
             });

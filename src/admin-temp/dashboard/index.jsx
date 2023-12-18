@@ -3,6 +3,8 @@ import "./dashboard.css"
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 import L from 'leaflet';
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 // Fix for default marker icon path
 delete L.Icon.Default.prototype._getIconUrl;
@@ -88,13 +90,21 @@ function GoogleChart() {
     return <div id="chart_div" />;
   }
 export default function Dashboard(){
+    const navigate=useNavigate();
     const [data, setData] = useState({trueDumper:"Pls wait",falseDumper:"Pls wait",trueShovel:"Pls wait",falseShovel:"Pls wait"});
     const [announcement, setAnnouncement] = useState([]);
     useEffect(() => {
         const getData = async () => {
-        await fetch("http://localhost:3001/frontend/dumpers_shovels_summary").then(res => {
+        await fetch("http://localhost:3001/frontend/dumpers_shovels_summary",{
+          headers:{
+            'Authorization': `Bearer ${Cookies.get('autho')}`
+          }
+        }).then(res => {
                 if(res.status === 200){
                     return res.json();
+                }
+                else if(res.status===403){
+                  navigate('/signin')
                 }
                 else{
                     console.log(res.err);
@@ -105,9 +115,16 @@ export default function Dashboard(){
             }).catch(err => {
                 console.log(err);
             })
-            await fetch("http://localhost:3001/frontend/annoucements").then(res => {
+            await fetch("http://localhost:3001/frontend/annoucements",{
+              headers:{
+                Authorization: `Bearer ${Cookies.get('autho')}`
+              }
+            }).then(res => {
                 if(res.status === 200){
                     return res.json();
+                }
+                else if(res.status===403){
+                  navigate('/signin')
                 }
                 else{
                     console.log(res.err);
