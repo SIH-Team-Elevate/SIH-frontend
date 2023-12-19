@@ -35,19 +35,19 @@ export default function Announcement() {
 
     return (
         <div className="announcement">
-            <div class="content">
-                <div class="box">
-                    <div class="ann">Announcement</div>
+            <div className="content">
+                <div className="box">
+                    <div className="ann">Announcement</div>
                     <textarea ref={textareaRef} type="text" rows="15"></textarea>
-                    <div class="buttons">
+                    <div className="buttons">
                         <button onClick={handleSend}>
-                            <span class="material-symbols-outlined">
+                            <span className="material-symbols-outlined">
                                 send
                             </span>
                             <div>Send</div>
                         </button>
                         <button onClick={handleClose}>
-                            <span class="material-symbols-outlined">
+                            <span className="material-symbols-outlined">
                                 close
                             </span>
                             <div>Close</div>

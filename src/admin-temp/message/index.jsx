@@ -17,12 +17,22 @@ export default function Message() {
                 headers:{
                     Authorization: `Bearer ${Cookies.get('autho')}`
                 }
-            }).then((res) => res.json()).then((res) => {
-                if(res.status === 403){
-                    navigate('/signin');
+            }).then(res => {
+                if(res.status === 200){
+                    return res.json();
                 }
+                else if(res.status===403){
+                  navigate('/signin')
+                  return null
+                }
+                else{
+                    console.log(res.err);
+                    return null
+                }
+            }).then((res) => {
+                if(res){
                 setData(res.queries);
-                setLoading(false);
+                setLoading(false);}
             });
         }
         getData();

@@ -4,6 +4,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import { Button, Card, CardContent, CardHeader, Dialog, DialogContent, Typography} from "@mui/material";
 
 function Vehicle(){
     const [loading, setLoading] = useState(true);
@@ -15,10 +16,17 @@ function Vehicle(){
                 headers:{
                     Authorization: `Bearer ${Cookies.get('autho')}`
                 }
-            }).then((res) => res.json()).then((res) => {
-                if(res.status === 403){
-                    navigate('/signin');
+            }).then(res => {
+                if(res.status === 200){
+                    return res.json();
                 }
+                else if(res.status===403){
+                  navigate('/signin')
+                }
+                else{
+                    console.log(res.err);
+                }
+            }).then((res) => {
                 setData(res);
                 setLoading(false);
             });
@@ -41,7 +49,7 @@ function Vehicle(){
                             <td>{item.id}</td>
                             <td>Shovel</td>
                             <td>{item.name}</td>
-                            <td>{item.capacity}</td>
+                            <td>{item.size}</td>
                             <td>{item.status?"Working":"Not Working"}</td>
                         </tr>)
                     })     
@@ -67,16 +75,37 @@ function Live(){
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
     const navigate = useNavigate();
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const handleClick = (event) => {
+        event.stopPropagation();
+    setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = (event) => {
+        event.stopPropagation();
+    setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
     useEffect(() => {
         const getData = async () => {
             await fetch("http://localhost:3001/frontend/users",{
                 headers:{
                     Authorization: `Bearer ${Cookies.get('autho')}`
                 }
-            }).then((res) => res.json()).then((res) => {
-                if(res.status === 403){
-                    navigate('/signin');
+            }).then(res => {
+                if(res.status === 200){
+                    return res.json();
                 }
+                else if(res.status===403){
+                  navigate('/signin')
+                }
+                else{
+                    console.log(res.err);
+                }
+            }).then((res) => {
                 setData(res);
                 setLoading(false);
             });
@@ -96,15 +125,6 @@ function Live(){
                     <th>Trips</th>
                     <th></th>
                 </tr>
-                <tr>
-                    <td>SH102</td>
-                    <td>Pratyaksh</td>
-                    <td>Shovel</td>
-                    <td>Dump1</td>
-                    <td>Working</td>
-                    <td>5</td>
-                    <td><div>View Profie</div></td>
-                </tr>
                 {
                     data.users.map((item)=>{
                         return(<tr>
@@ -114,7 +134,54 @@ function Live(){
                             <td>{"Update this"}</td>
                             <td>{item.status?"Working":"Not Working"}</td>
                             <td>{item.total}</td>
-                            <td><div>View Profie</div></td>
+                            <td><div onClick={handleClick}>View Profie</div>
+                            <Dialog open={open} onClose={handleClose}>
+                            <Card>
+                                <CardHeader 
+                                    title="Profile Details" 
+                                    titleTypographyProps={{ variant:'h2', sx:{ fontSize: '2.5rem', color: 'orange' }}}
+                                />
+                                <CardContent>
+                                    <Typography 
+                                        variant="h6" 
+                                        component="div" 
+                                        sx={{ fontSize: '1.8rem'}}
+                                    >
+                                        Name: {item.name}
+                                    </Typography>
+                                    <Typography 
+                                        variant="body1" 
+                                        component="div" 
+                                        sx={{ fontSize: '1.5rem'}}
+                                    >
+                                        Type: {item.type}
+                                    </Typography>
+                                    <Typography 
+                                        variant="body1" 
+                                        component="div" 
+                                        sx={{ fontSize: '1.5rem' }}
+                                    >
+                                        ID: {item._id}
+                                    </Typography>
+                                    <Typography 
+                                        variant="body1" 
+                                        component="div" 
+                                        sx={{ fontSize: '1.5rem' }}
+                                    >
+                                        Total: {item.total}
+                                    </Typography>
+                                    <Typography 
+                                        variant="body1" 
+                                        component="div" 
+                                        sx={{ fontSize: '1.5rem' }}
+                                    >
+                                        History Size: {item.History.length}
+                                    </Typography>
+                                </CardContent>
+                                <Button onClick={handleClose}>Close</Button>
+                            </Card>
+                            </Dialog>
+                            </td>
                         </tr>)
                     })
                 }
@@ -136,10 +203,17 @@ function History(){
                     Authorization: `Bearer ${Cookies.get('autho')}`
                 }
             }
-            ).then((res) => res.json()).then((res) => {
-                if(res.status === 403){
-                    navigate('/signin');
+            ).then(res => {
+                if(res.status === 200){
+                    return res.json();
                 }
+                else if(res.status===403){
+                  navigate('/signin')
+                }
+                else{
+                    console.log(res.err);
+                }
+            }).then((res) => {
                 setData(res);
                 setLoading(false);
             });
