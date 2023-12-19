@@ -5,6 +5,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { CircularProgress } from "@mui/material";
 
 // Fix for default marker icon path
 delete L.Icon.Default.prototype._getIconUrl;
@@ -17,7 +18,9 @@ L.Icon.Default.mergeOptions({
 
 function LeafletMap() {
   const [currentLocation, setCurrentLocation] = useState(null);
-
+  const [data,setData]=useState({shovel:[],dumper:[]})
+  const navigate=useNavigate();
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (navigator && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(pos => {
@@ -29,9 +32,43 @@ function LeafletMap() {
         });
       });
     }
+    const location=async()=>{
+      await fetch("http://localhost:3001/frontend/dumpster_shovel_location",{
+        headers:{
+          'Authorization': `Bearer ${Cookies.get('autho')}`
+        }
+    }
+    ).then(
+        res => {
+            if(res.status === 200){
+                return res.json();
+            }
+            else if(res.status===403){
+              navigate('/signin')
+            }
+            else{
+                console.log(res.err);
+            }
+        }
+    ).then(data => {
+      // console.log(data)
+      const shovel=data.shovel;
+      const dumper=data.dumper;
+      const data_={shovel:shovel,dumper:dumper}
+      console.log(data_)
+      setData(data_)
+    }).catch(err => {
+        console.log(err);
+
+    })
+  }
+  location();
+  setLoading(false);
   }, []);
 
   return (
+    <>{
+      loading?<CircularProgress />:
     <div className="leaflet-map">
   {currentLocation && (
     <MapContainer
@@ -39,18 +76,24 @@ function LeafletMap() {
       zoom={12}
       className="map"
       style={{height:"350px", width:"700px"}}
-      scrollWheelZoom={false}
-      zoomControl={false}
-      dragging={false}
+      // scrollWheelZoom={false}
+      // zoomControl={false}
+      // dragging={false}
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
       />
       <Marker position={[currentLocation.lat, currentLocation.lng]} />
+      {data.shovel.map((item)=>{
+        return(<Marker position={[item.latitude,item.longitude]}/>)
+      })}
+      {data.dumper.map((item)=>{
+        return(<Marker position={[item.latitude,item.longitude]}/>)
+      })}
     </MapContainer>
   )}
-</div>
+</div>}</>
   );
 };
 
