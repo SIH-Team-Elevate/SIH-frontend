@@ -6,7 +6,6 @@ import L from 'leaflet';
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { CircularProgress } from "@mui/material";
-
 // Fix for default marker icon path
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -15,10 +14,9 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
-
 function LeafletMap() {
   const [currentLocation, setCurrentLocation] = useState(null);
-  const [data,setData]=useState({shovel:[],dumper:[]})
+  const [data,setData]=useState([])
   const navigate=useNavigate();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -33,7 +31,7 @@ function LeafletMap() {
       });
     }
     const location=async()=>{
-      await fetch("http://localhost:3001/frontend/dumpster_shovel_location",{
+      await fetch("http://localhost:3001/frontend/drivers",{
         headers:{
           'Authorization': `Bearer ${Cookies.get('autho')}`
         }
@@ -51,18 +49,14 @@ function LeafletMap() {
             }
         }
     ).then(data => {
-      // console.log(data)
-      const shovel=data.shovel;
-      const dumper=data.dumper;
-      const data_={shovel:shovel,dumper:dumper}
-      console.log(data_)
-      setData(data_)
+      setData(data.users)
     }).catch(err => {
         console.log(err);
 
     })
   }
   location();
+    
   setLoading(false);
   }, []);
 
@@ -85,10 +79,7 @@ function LeafletMap() {
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
       />
       <Marker position={[currentLocation.lat, currentLocation.lng]} />
-      {data.shovel.map((item)=>{
-        return(<Marker position={[item.latitude,item.longitude]}/>)
-      })}
-      {data.dumper.map((item)=>{
+      {data.map((item)=>{
         return(<Marker position={[item.latitude,item.longitude]}/>)
       })}
     </MapContainer>
